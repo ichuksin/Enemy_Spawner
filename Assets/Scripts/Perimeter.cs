@@ -8,8 +8,6 @@ public class Perimeter : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if( collision.TryGetComponent<Enemy>(out Enemy enemy))
-        {
             EnemyWentBeyondPerimeter?.Invoke(enemy);
-        }
     }
 }

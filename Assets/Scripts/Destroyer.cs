@@ -8,17 +8,13 @@ public class Destroyer : MonoBehaviour
     private void OnEnable()
     {
         foreach (Perimeter perimeter in _perimeters)
-        {
             perimeter.EnemyWentBeyondPerimeter += EnemyDestroy;
-        }  
     }
 
     private void OnDisable()
     {
         foreach (Perimeter perimeter in _perimeters)
-        {
             perimeter.EnemyWentBeyondPerimeter -= EnemyDestroy;
-        }
     }
 
     private void EnemyDestroy (Enemy enemy)
