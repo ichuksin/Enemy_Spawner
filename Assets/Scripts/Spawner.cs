@@ -12,9 +12,13 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        foreach (var item in _spawnPointsConteiner.GetComponentsInChildren<Transform>())
-            if (item.position != _spawnPointsConteiner.transform.position)
-                _spawnPoints.Add(item.position);
+        Transform spawnPointTransform;
+
+        for (int i = 0; i < _spawnPointsConteiner.childCount; i++)
+        {
+            spawnPointTransform = _spawnPointsConteiner.GetChild(i);
+            _spawnPoints.Add(spawnPointTransform.position);
+        }
 
         StartCoroutine(SpawnTimer(_delay));
     }
@@ -22,8 +26,14 @@ public class Spawner : MonoBehaviour
     private void Spawn( )
     {
         Enemy enemy = _pool.GetObject();
-
         enemy.Init(_spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Count)], _directions[UnityEngine.Random.Range(0, _directions.Length)]);
+        enemy.EnemyDied += Release;
+    }
+    
+    private void Release(Enemy enemy)
+    {
+        enemy.EnemyDied -= Release;
+        _pool.Release(enemy);
     }
 
     private IEnumerator SpawnTimer(float delay)
