@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float _delay;
     [SerializeField] private Pool _pool;
     [SerializeField] private Transform _spawnPointsConteiner;
-    private List<Vector3> _spawnPoints = new List<Vector3>();
+    private List<SpawnPoint> _spawnPoints = new List<SpawnPoint>();
     private Vector2[] _directions =  {Vector2.left, Vector2.right, Vector2.up, Vector2.down};
 
     private void Start()
@@ -17,7 +17,7 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < _spawnPointsConteiner.childCount; i++)
         {
             spawnPointTransform = _spawnPointsConteiner.GetChild(i);
-            _spawnPoints.Add(spawnPointTransform.position);
+            _spawnPoints.Add(spawnPointTransform.GetComponent<SpawnPoint>());
         }
 
         StartCoroutine(SpawnTimer(_delay));
@@ -25,17 +25,11 @@ public class Spawner : MonoBehaviour
 
     private void Spawn( )
     {
-        Enemy enemy = _pool.GetObject();
-        enemy.Init(_spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Count)], _directions[UnityEngine.Random.Range(0, _directions.Length)]);
-        enemy.EnemyDied += Release;
+        int spawnPointIndex = UnityEngine.Random.Range(0, _spawnPoints.Count);
+        Enemy enemy = _pool.GetObject(_spawnPoints[spawnPointIndex].EnemyPrefab);
+        enemy.Init(_spawnPoints[spawnPointIndex].transform.position, _spawnPoints[spawnPointIndex].Target);
     }
     
-    private void Release(Enemy enemy)
-    {
-        enemy.EnemyDied -= Release;
-        _pool.Release(enemy);
-    }
-
     private IEnumerator SpawnTimer(float delay)
     {
         var wait = new WaitForSeconds(delay);

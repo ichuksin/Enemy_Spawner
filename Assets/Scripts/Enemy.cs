@@ -7,10 +7,10 @@ public class Enemy : MonoBehaviour
 
     public event Action<Enemy> EnemyDied;
 
-    public void Init(Vector3 position, Vector2 direction)
+    public void Init(Vector3 position, Ship target)
     {
         transform.position = position;
-        _mover.Init(direction);
+        _mover.Init(target);
         Enable();
     }
 

@@ -3,15 +3,15 @@
 public class Mover : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    private Vector2 _direction = Vector2.left;
+    [SerializeField] private Ship _target;
 
-    public void Init(Vector2 direction)
+    public void Init(Ship target)
     {
-        _direction = direction;
+        _target = target;
     }
 
     private void Update()
     {
-        transform.Translate(_direction * _speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _speed * Time.deltaTime);
     }
 }
