@@ -13,9 +13,9 @@ public class RouteInvestigator : MonoBehaviour
     {
         if (transform.position == _waypoints[_currentWaypoint].position)
         {
-            _currentWaypoint = (_currentWaypoint + 1) % _waypoints.Length;
+            _currentWaypoint = ++_currentWaypoint % _waypoints.Length;
             _previousDirection = _currentDirection;
-            _currentDirection = (_waypoints[_currentWaypoint].position - transform.position).normalized;
+            _currentDirection = (_waypoints[_currentWaypoint].position - transform.position);
             transform.rotation *=  Quaternion.FromToRotation(_previousDirection, _currentDirection);
         }
 
